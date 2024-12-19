@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO DO List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #ft_list {
+            margin-top: 20px;
+        }
+
+        .todo {
+            padding: 10px;
+            background-color: #f0f0f0;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .todo:hover {
+            background-color: #e0e0e0;
+        }
+
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>TO DO List</h1>
+
+    <!-- New Button -->
+    <button id="newButton">New</button>
+
+    <!-- TO DO List -->
+    <div id="ft_list"></div>
+
+    <script>
+        $(document).ready(function() {
+            // Load the TO DO list from cookies when the page loads
+            loadTodos();
+
+            // Add new TO DO when the "New" button is clicked
+            $('#newButton').click(function() {
+                let newTodo = prompt("Enter a new TO DO:");
+                if (newTodo && newTodo.trim() !== "") {
+                    addTodoToList(newTodo);
+                } else {
+                    alert("Please enter a valid TO DO.");
+                }
+            });
+
+            // Function to add a new TO DO to the list and save it in the cookie
+            function addTodoToList(todoText) {
+                // Create a new div for the TO DO
+                let todoDiv = $('<div class="todo"></div>').text(todoText);
+                
+                // Add the TO DO to the top of the list
+                $('#ft_list').prepend(todoDiv);
+
+                // Save the TO DO list in a cookie
+                saveTodos();
+            }
+
+            // Remove a TO DO when it's clicked, with a confirmation
+            $(document).on('click', '.todo', function() {
+                let confirmed = confirm("Are you sure you want to remove this TO DO?");
+                if (confirmed) {
+                    $(this).remove();
+                    saveTodos(); // Save the updated list
+                }
+            });
+
+            // Save the current TO DO list into a cookie
+            function saveTodos() {
+                let todos = [];
+                $('.todo').each(function() {
+                    todos.push($(this).text());
+                });
+
+                // Save TO DO list as a JSON string in a cookie
+                document.cookie = "todos=" + JSON.stringify(todos) + "; path=/";
+            }
+
+            // Load the TO DO list from cookies
+            function loadTodos() {
+                let todos = getCookie('todos');
+                if (todos) {
+                    todos = JSON.parse(todos);
+                    todos.forEach(function(todo) {
+                        addTodoToList(todo);
+                    });
+                }
+            }
+
+            // Function to get a cookie by name
+            function getCookie(name) {
+                let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? match[2] : null;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background Color</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #clickMeButton {
+            padding: 20px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        #clickMeButton:hover {
+            background-color: #a533ff;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="clickMeButton">Click Me!</button>
+
+    <script>
+        $(document).ready(function() {
+            $('#clickMeButton').click(function() {
+                // Generate random color
+                var randomColor = getRandomColor();
+                // Change the background color to the random color
+                $('body').css('background-color', randomColor);
+            });
+
+            // Function to generate a random hex color
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        });
+    </script>
+
+</body>
+</html>
